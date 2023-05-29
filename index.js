@@ -68,12 +68,6 @@ app.post('/web-data', async (req, res) => {
         })
         return res.status(200).json({});
     } catch (e) {
-        await bot.answerWebAppQuery(queryId, {
-            type: 'article',
-            id: queryId,
-            title: 'Не удалось совершить покупку',
-            input_message_content: {message_text: 'Не удалось совершить покупку, попробуйте позже'}
-        })
         return res.status(500).json({})
     }
 })
