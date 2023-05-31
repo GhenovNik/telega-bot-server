@@ -12,7 +12,7 @@ const webAppUrl = "https://storied-ganache-f8808d.netlify.app";
 const bot = new TelegramBot(token, { polling: true });
 const app = express();
 
-aapp.use(express.json());
+app.use(express.json());
 app.use(cors());
 
 bot.on("message", async (msg) => {
