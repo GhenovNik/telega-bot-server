@@ -12,7 +12,7 @@ const webAppUrl = "https://storied-ganache-f8808d.netlify.app";
 const bot = new TelegramBot(token, { polling: true });
 const app = express();
 
-app.use(express.json());
+aapp.use(express.json());
 app.use(cors());
 
 bot.on("message", async (msg) => {
@@ -23,22 +23,18 @@ bot.on("message", async (msg) => {
     await bot.sendMessage(chatId, "Ниже появится кнопка, заполни форму", {
       reply_markup: {
         keyboard: [
-          [{ text: "Заполнить форму", web_app: { url: webAppUrl + "/form" } }],
+          [{ text: "Заполнить форму", url: webAppUrl + "/form" }],
         ],
       },
     });
 
-    await bot.sendMessage(
-      chatId,
-      "Заходи в наш интернет магазин по кнопке ниже",
-      {
-        reply_markup: {
-          inline_keyboard: [
-            [{ text: "Сделать заказ", web_app: { url: webAppUrl } }],
-          ],
-        },
-      }
-    );
+    await bot.sendMessage(chatId, "Заходи в наш интернет магазин по кнопке ниже", {
+      reply_markup: {
+        inline_keyboard: [
+          [{ text: "Сделать заказ", url: webAppUrl }],
+        ],
+      },
+    });
   }
 
   if (msg?.web_app_data?.data) {
@@ -50,7 +46,7 @@ bot.on("message", async (msg) => {
       await bot.sendMessage(chatId, "Ваша улица: " + data?.street);
 
       setTimeout(async () => {
-        await bot.sendMessage(chatId, "Всю информацию вы получите в этом чате");
+        await bot.sendMessage(chatId, "Вся информация будет отправлена в этот чат");
       }, 3000);
     } catch (e) {
       console.log(e);
@@ -66,9 +62,9 @@ app.post("/web-data", async (req, res) => {
       id: queryId,
       title: "Успешная покупка",
       input_message_content: {
-        message_text: ` Поздравляю с покупкой, вы приобрели товар на сумму ${totalPrice}, ${products
-          .map((item) => item.title)
-          .join(", ")}`,
+        message_text: `Поздравляю с покупкой! Вы приобрели товар на сумму ${totalPrice} рублей: ${products
+            .map((item) => item.title)
+            .join(", ")}`,
       },
     });
     return res.status(200).json({});
@@ -77,6 +73,6 @@ app.post("/web-data", async (req, res) => {
   }
 });
 
-const PORT = 8000;
+const PORT = process.env.PORT || 8000;
 
-app.listen(PORT, () => console.log("server started on PORT " + PORT));
+app.listen(PORT, () => console.log("Server started on PORT " + PORT));
